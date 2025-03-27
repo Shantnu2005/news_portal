@@ -24,9 +24,9 @@ body {
     font-family: 'Poppins', sans-serif;
     margin: 0;
     padding: 0;
-    background: url('images/image.png') no-repeat center center fixed; /* Add your image path */
+    background: url('images/bg.jpg') no-repeat center center fixed; /* Add your image path */
     background-size: cover;
-    color:rgb(21, 11, 11);
+    color:rgb(0, 0, 0);
 }
 
 /* Optional: To add a slightly darker overlay */
@@ -37,8 +37,8 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.4); /* Dark overlay for better readability */
-    z-index: -1;
+    background: rgba(4, 4, 4, 0.52); /* Dark overlay for better readability */
+    z-index: -5;
 }
 
         /* 🎨 Blog Post Card */
@@ -53,14 +53,14 @@ body::before {
 
         .card.blog-card:hover {
             transform: scale(1.02);
-            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+            box-shadow: 0px 4px 12px rgba(200, 190, 190, 0.2);
         }
 
         /* 📸 Image Styling */
         .blog-img-container {
             position: relative;
             width: 100%;
-            height: 380px; /* 🔥 Increased height for better visuals */
+            height: 390px; /* 🔥 Increased height for better visuals */
             overflow: hidden;
         }
 

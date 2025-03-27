@@ -20,6 +20,30 @@ include('includes/config.php');
     <!-- Custom styles for this template -->
     <link href="css/modern-business.css" rel="stylesheet">
 
+    <style>
+      /* 🌟 Full Page Background */
+      body {
+        margin: 0;
+        padding: 0;
+        background-image: url('images/bg.jpg'); /* Add your background image */
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+      }
+
+      /* Add an overlay for better readability */
+      body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4); /* Dark overlay */
+        z-index: -1;
+      }
+    </style>
+
   </head>
 
   <body>

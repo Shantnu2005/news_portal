@@ -83,7 +83,7 @@
         border: none;
         border-radius: 8px;
         overflow: hidden;
-        box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+        box-shadow: 0px 2px 6px rgba(67, 62, 62, 0.29);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 

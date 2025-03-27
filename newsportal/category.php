@@ -26,18 +26,26 @@ include('includes/config.php');
         body {
             margin: 0;
             padding: 0;
-            background-image: url('images/image.png'); /* Add Full-Size Background Image */
+            background-image: url('images/bg.jpg'); /* Add Full-Size Background Image */
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
             font-family: Arial, sans-serif;
-            
         }
-        
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4); /* Dark overlay for better readability */
+            z-index: -1;
+        }
 
         /* Main Container with Transparency */
         .main-container {
-            /* Slightly Transparent White for Better Readability */
             border-radius: 12px;
             padding: 20px;
             margin-top: 3%;
@@ -62,7 +70,7 @@ include('includes/config.php');
 
         .subcategory-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 18px rgba(167, 164, 164, 0.2);
         }
 
         /* Full Background Image for Subcategory */
@@ -75,7 +83,7 @@ include('includes/config.php');
             top: 0;
             left: 0;
             z-index: 1;
-            filter: brightness(0.6);
+            filter: brightness(0.7);
         }
 
         /* Overlay with Text */
@@ -105,7 +113,7 @@ include('includes/config.php');
             align-items: center;
             margin-bottom: 20px;
             gap: 15px;
-            background-color: #f8f9fa;
+            background-color: rgba(203, 207, 211, 0.61);
             padding: 10px 15px;
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -184,7 +192,7 @@ include('includes/config.php');
                     $subcat_count = mysqli_num_rows($subcat_query);
 
                     if ($subcat_count > 0) {
-                        echo "<h2>Select Subcategory</h2>";
+                        echo "<h2 style='color: white; font-weight: bold;'>Select Subcategory</h2>";
                         echo "<div class='subcategory-container'>";
                         while ($subcat_row = mysqli_fetch_array($subcat_query)) {
                             $subcat_image = htmlentities($subcat_row['Image']);
@@ -200,7 +208,7 @@ include('includes/config.php');
                         }
                         echo "</div>";
                     } else {
-                        echo "<h3>No Subcategories Available</h3>";
+                        echo "<h3 style='color: white; font-weight: bold;'>No Subcategories Available</h3>";
                     }
                 }
                 ?>
@@ -247,11 +255,7 @@ include('includes/config.php');
                 <div class="post-section">
                     <?php
                     // Pagination Setup
-                    if (isset($_GET['pageno'])) {
-                        $pageno = $_GET['pageno'];
-                    } else {
-                        $pageno = 1;
-                    }
+                    $pageno = $_GET['pageno'] ?? 1;
                     $no_of_records_per_page = 8;
                     $offset = ($pageno - 1) * $no_of_records_per_page;
 
@@ -263,8 +267,16 @@ include('includes/config.php');
                         $condition = " AND tblposts.CategoryId='" . $_SESSION['catid'] . "'";
                     }
 
+                    // Date Filter Condition
+                    $date_filter = "";
+                    if (!empty($_GET['month']) && !empty($_GET['year'])) {
+                        $month = intval($_GET['month']);
+                        $year = intval($_GET['year']);
+                        $date_filter = " AND MONTH(tblposts.PostingDate) = $month AND YEAR(tblposts.PostingDate) = $year";
+                    }
+
                     // Count total records with condition
-                    $total_pages_sql = "SELECT COUNT(*) FROM tblposts WHERE Is_Active=1 $condition";
+                    $total_pages_sql = "SELECT COUNT(*) FROM tblposts WHERE Is_Active=1 $condition $date_filter";
                     $result = mysqli_query($con, $total_pages_sql);
                     $total_rows = mysqli_fetch_array($result)[0];
                     $total_pages = ceil($total_rows / $no_of_records_per_page);
@@ -274,7 +286,7 @@ include('includes/config.php');
                         FROM tblposts 
                         LEFT JOIN tblcategory ON tblcategory.id=tblposts.CategoryId 
                         LEFT JOIN tblsubcategory ON tblsubcategory.SubCategoryId=tblposts.SubCategoryId 
-                        WHERE tblposts.Is_Active=1 $condition
+                        WHERE tblposts.Is_Active=1 $condition $date_filter
                         ORDER BY tblposts.id DESC 
                         LIMIT $offset, $no_of_records_per_page");
 
@@ -282,11 +294,11 @@ include('includes/config.php');
 
                     // Show posts from selected subcategory
                     if ($rowcount == 0) {
-                        echo "<h3>No records found in this category or subcategory.</h3>";
+                        echo "<h3 style='color: white; font-weight: bold;'>No records found in this category or subcategory.</h3>";
                     } else {
                         while ($row = mysqli_fetch_array($query)) {
                     ?>
-                            <h3><?php echo htmlentities($row['category']); ?> News</h3>
+                            <h3 style="color: white; font-weight: bold;"><?php echo htmlentities($row['category']); ?> News</h3>
                             <div class="card mb-4">
                                 <img class="card-img-top" src="admin/postimages/<?php echo htmlentities($row['PostImage']); ?>" alt="<?php echo htmlentities($row['posttitle']); ?>">
                                 <div class="card-body">
@@ -300,17 +312,20 @@ include('includes/config.php');
                     <?php }
                     } ?>
 
-                    <!-- Pagination Links -->
-                    <ul class="pagination justify-content-center mb-4">
-                        <li class="page-item"><a href="?pageno=1" class="page-link">First</a></li>
-                        <li class="page-item <?php if ($pageno <= 1) { echo 'disabled'; } ?>">
-                            <a href="<?php if ($pageno > 1) { echo "?pageno=" . ($pageno - 1); } else { echo '#'; } ?>" class="page-link">Prev</a>
-                        </li>
-                        <li class="page-item <?php if ($pageno >= $total_pages) { echo 'disabled'; } ?>">
-                            <a href="<?php if ($pageno < $total_pages) { echo "?pageno=" . ($pageno + 1); } else { echo '#'; } ?>" class="page-link">Next</a>
-                        </li>
-                        <li class="page-item"><a href="?pageno=<?php echo $total_pages; ?>" class="page-link">Last</a></li>
-                    </ul>
+                    <?php
+                    // Show Pagination Links only if records exist
+                    if ($rowcount > 0) { ?>
+                        <ul class="pagination justify-content-center mb-4">
+                            <li class="page-item"><a href="?pageno=1" class="page-link">First</a></li>
+                            <li class="page-item <?php if ($pageno <= 1) { echo 'disabled'; } ?>">
+                                <a href="<?php if ($pageno > 1) { echo "?pageno=" . ($pageno - 1); } else { echo '#'; } ?>" class="page-link">Prev</a>
+                            </li>
+                            <li class="page-item <?php if ($pageno >= $total_pages) { echo 'disabled'; } ?>">
+                                <a href="<?php if ($pageno < $total_pages) { echo "?pageno=" . ($pageno + 1); } else { echo '#'; } ?>" class="page-link">Next</a>
+                            </li>
+                            <li class="page-item"><a href="?pageno=<?php echo $total_pages; ?>" class="page-link">Last</a></li>
+                        </ul>
+                    <?php } ?>
                 </div>
             </div>
 

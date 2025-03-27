@@ -19,12 +19,35 @@ include('includes/config.php');
     <link href="css/modern-business.css" rel="stylesheet">
 
     <style>
+        /* 🌅 Full-Screen Background */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: url('images/image.png') no-repeat center center fixed; /* Add your image path */
+    background-size: cover;
+    color:rgb(21, 11, 11);
+}
+
+/* Optional: To add a slightly darker overlay */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4); /* Dark overlay for better readability */
+    z-index: -1;
+}
+
         /* 🎨 Blog Post Card */
         .card.blog-card {
-            border: none;
+        
+            border: 10%;
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0px 2px 6px rgba(243, 236, 236, 0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
@@ -37,7 +60,7 @@ include('includes/config.php');
         .blog-img-container {
             position: relative;
             width: 100%;
-            height: 400px; /* 🔥 Increased height for better visuals */
+            height: 380px; /* 🔥 Increased height for better visuals */
             overflow: hidden;
         }
 
@@ -84,8 +107,9 @@ include('includes/config.php');
         }
 
         .btn-custom:hover {
-            background: #0056b3;
+            background:rgb(109, 164, 222);
             transform: scale(1.05);
+            color: white;
         }
 
         /* 📖 Pagination */
@@ -97,12 +121,14 @@ include('includes/config.php');
         .pagination .page-link:hover {
             background: rgba(0, 0, 0, 0.1);
         }
+
+        
     </style>
 </head>
 
 <body>
     <!-- Navigation -->
-    <?php include('includes/header.php');?>
+    <?php include('includes/header.php');?><br>
 
     <!-- Page Content -->
     <div class="container">
@@ -128,9 +154,9 @@ include('includes/config.php');
                 while ($row = mysqli_fetch_array($query)) {
                 ?>
 
-                <div class="card mb-4 blog-card">
+                <div class="card mb-4 blog-card" style="margin-top: 50px;">
                     <!-- 📸 Blog Image -->
-                    <div class="blog-img-container"><br><br>
+                    <div class="blog-img-container">
                         <img src="admin/postimages/<?php echo htmlentities($row['PostImage']);?>" alt="<?php echo htmlentities($row['posttitle']);?>">
                         <div class="blog-info-overlay">
                             <a href="category.php?catid=<?php echo htmlentities($row['cid']);?>"><?php echo htmlentities($row['category']);?></a> |

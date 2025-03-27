@@ -1,7 +1,7 @@
-<div class="col-md-4">
 
+<div class="col-md-4">
     <!-- 🔎 Search Widget -->
-    <div class="card widget-card mb-4"><br><br>
+    <div class="card widget-card mb-4">
         <h5 class="card-header widget-title">Search</h5>
         <div class="card-body">
             <form name="search" action="search.php" method="post">
@@ -120,7 +120,7 @@
 
     .category-overlay {
         position: absolute;
-        top: 0;
+        top: 10;
         left: 0;
         width: 100%;
         height: 100%;
@@ -162,5 +162,8 @@
     .news-link:hover {
         color: rgba(0, 0, 0, 1);
         text-decoration: underline;
+    }
+    .col-md-4{
+        margin-top: 50px;
     }
 </style>
